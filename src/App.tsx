@@ -1,26 +1,26 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { GlobalStyle } from './style';
+import { AppLeft } from './AppLeft';
+import { AppRight } from './AppRight';
+import { ItemWrapper as Wrapper } from './components/helpers/ItemWrapper';
+import styled from 'styled-components';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+const AppWrapper = styled(Wrapper)`
+	justify-content: space-evenly;
 
-export default App;
+	@media (max-width: 990px) {
+		flex-direction: column;
+	}
+`;
+
+export const App: React.FC = () => {
+	return (
+		<>
+			<GlobalStyle />
+			<AppWrapper>
+				<AppLeft className='app__left' />
+				<AppRight />
+			</AppWrapper>
+		</>
+	);
+};
