@@ -59,7 +59,11 @@ export const LineGraph: React.FC<Props> = ({ casesType }) => {
 			);
 			const data: Data = await result.json();
 			let chartData = buildChartData(data, casesType);
-			setData(chartData);
+			if (casesType === 'recovered') {
+				setData(chartData.slice(0, chartData.length - 3));
+			} else {
+				setData(chartData);
+			}
 		};
 		fetchData();
 	}, [casesType]);
@@ -72,15 +76,27 @@ export const LineGraph: React.FC<Props> = ({ casesType }) => {
 						datasets: [
 							{
 								label: casesType,
-								backgroundColor: 'rgba(233, 42, 77, 0.1)',
-								borderColor: '#CC1034',
+								backgroundColor: `${
+									casesType === 'recovered'
+										? '#cae8aa7f'
+										: '#e6a5b17f'
+								}`,
+								borderColor: `${
+									casesType === 'recovered'
+										? '#7dd71d'
+										: '#CC1034'
+								}`,
 								fill: true,
-								fillColor: 'rgba(220,220,220,0.2)',
-								strokeColor: 'rgba(220,220,220,1)',
-								pointColor: 'rgba(220,220,220,1)',
-								pointStrokeColor: '#fff',
-								pointHighlightFill: '#fff',
-								pointHighlightStroke: 'rgba(220,220,220,1)',
+								fillColor: `${
+									casesType === 'recovered'
+										? '#cae8aa7f'
+										: '#e6a5b17f'
+								}`,
+								strokeColor: 'rgba(220,50,50,1)',
+								pointColor: 'rgba(50,50,220,1)',
+								pointStrokeColor: '#6f5f4f',
+								pointHighlightFill: '#4f5f6f',
+								pointHighlightStroke: 'rgba(220,100,100,1)',
 								data: data,
 							},
 						],

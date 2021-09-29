@@ -1,4 +1,5 @@
 import { Dispatch } from 'redux';
+import { CasesType } from '../LineGraph';
 import { ActionTypes } from './types';
 
 export interface Country {
@@ -19,6 +20,11 @@ export interface FetchCountriesAction {
 	payload: Country[];
 }
 
+export interface FetchCasesTypeAction {
+	type: ActionTypes.fetchCasesType;
+	payload: CasesType;
+}
+
 export const fetchCountriesAction = () => {
 	return async (dispatch: Dispatch) => {
 		const response = await fetch(
@@ -30,6 +36,27 @@ export const fetchCountriesAction = () => {
 			payload: data,
 		});
 	};
+};
+
+export const fetchCaseTypeAction = (
+	casesType: CasesType
+): FetchCasesTypeAction => {
+	if (CasesType[casesType] === 'cases') {
+		return {
+			type: ActionTypes.fetchCasesType,
+			payload: CasesType[casesType],
+		};
+	} else if (CasesType[casesType] === 'recovered') {
+		return {
+			type: ActionTypes.fetchCasesType,
+			payload: CasesType[casesType],
+		};
+	} else {
+		return {
+			type: ActionTypes.fetchCasesType,
+			payload: CasesType[casesType],
+		};
+	}
 };
 
 export * from './types';

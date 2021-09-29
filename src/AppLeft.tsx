@@ -6,10 +6,11 @@ import { Header, Select, Title } from './style';
 import { InfoBox } from './InfoBox';
 import { ItemWrapper as Wrapper } from './components/helpers/ItemWrapper';
 import { Map } from './Map';
-import { fetchCountriesAction } from './actions';
+import { fetchCountriesAction, fetchCaseTypeAction } from './actions';
 import { StoreState } from './store/store';
-import { CountryReducer } from './reducers';
+import { CountryReducer, CasesTypeReducer } from './reducers';
 import 'leaflet/dist/leaflet.css';
+import { CasesType } from './LineGraph';
 
 interface CountryInfo {
 	name?: string;
@@ -55,6 +56,10 @@ const InfoBoxWrapper = styled(Wrapper)`
 	@media (max-width: 500px) {
 		flex-wrap: wrap;
 	}
+
+	/* @media (max-width: 380px) {
+		flex-direction: column;
+	} */
 `;
 
 interface Props {
@@ -68,6 +73,12 @@ export const AppLeft: React.FC<Props> = (): JSX.Element => {
 	);
 
 	const { countries = [] } = countriesDataState;
+
+	const casesTypeState: CasesTypeReducer = useSelector(
+		(state: StoreState): CasesTypeReducer => state.casesTypeState
+	);
+	const { casesType } = casesTypeState;
+
 	const [countriesList, setCountriesList] = useState<CountryInfo[]>([]);
 	const [country, setCountry] = useState<string>('worldwide');
 	const [diseaseStat, setDiseaseStat] = useState<DiseaseStat>({});
@@ -157,29 +168,42 @@ export const AppLeft: React.FC<Props> = (): JSX.Element => {
 			<InfoBoxWrapper>
 				<InfoBox
 					title='Cases'
+					casesType={casesType}
+					active={casesType === 'cases'}
 					cases={diseaseStat.todayCases}
 					total={diseaseStat.cases}
-					onClick={(): void => console.log('cases')}
+					onClick={() =>
+						dispatch(fetchCaseTypeAction(CasesType['cases']))
+					}
 				/>
 				<InfoBox
 					title='Recovered'
+					casesType={casesType}
+					active={casesType === 'recovered'}
+					isGreen={true}
 					cases={diseaseStat.todayRecovered}
 					total={diseaseStat.recovered}
-					onClick={(): void => console.log('recovered')}
+					onClick={() =>
+						dispatch(fetchCaseTypeAction(CasesType['recovered']))
+					}
 				/>
 				<InfoBox
 					title='Deaths'
+					casesType={casesType}
+					active={casesType === 'deaths'}
 					cases={diseaseStat.todayDeaths}
 					total={diseaseStat.deaths}
-					onClick={(): void => console.log('deaths')}
+					onClick={() =>
+						dispatch(fetchCaseTypeAction(CasesType['deaths']))
+					}
 				/>
 			</InfoBoxWrapper>
-			<Map center={mapCenter} zoom={mapZoom} countries={countries} />
+			<Map
+				center={mapCenter}
+				zoom={mapZoom}
+				countries={countries}
+				casesType={casesType}
+			/>
 		</AppLeftWrapper>
 	);
 };
-
-// console.log(bcrypt.compareSync(password, user.password))
-// or
-// const isPasswordCorrect = await bcrypt.compare(password, user.password))
-// console.log(isPasswordCorrect)

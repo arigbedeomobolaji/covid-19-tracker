@@ -55,17 +55,18 @@ const CountryDataElement = styled.h4`
 export const showDataOnMap = (
 	data: Country[],
 	casesType: CasesType = CasesType['cases']
-) =>
-	data.map((country) => (
+) => {
+	return data.map((country) => (
 		<Circle
 			key={country.country}
 			center={[country.countryInfo.lat, country.countryInfo.long]}
-			fillOpacity={0.2}
+			fillOpacity={0.1}
 			color={casesTypeColors[casesType].hex}
 			fillColor={casesTypeColors[casesType].hex}
 			radius={Math.sqrt(
-				(country[casesType] * casesTypeColors[casesType].multipier) /
-					casesTypeColors[casesType].multipier
+				country[casesType] *
+					casesTypeColors[casesType].multipier *
+					Math.sqrt(casesTypeColors[casesType].multipier / 300)
 			)}
 		>
 			<Popup>
@@ -96,6 +97,7 @@ export const showDataOnMap = (
 			</Popup>
 		</Circle>
 	));
+};
 
 export const prettyPrintStat = (stat: number): string =>
 	stat ? `${numeral(stat).format('0.0a')}` : '0';
